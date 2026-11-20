@@ -1,0 +1,310 @@
+{% extends "base.html" %}
+{% block title %}Mastering Data Structures & Algorithms: A Practical Roadmap | EduGen AI{% endblock %}
+
+{% block favicon %}
+<link rel="icon" type="image/png" href="{{ url_for('static', filename='icons/home.png') }}">
+{% endblock %}
+
+{% block head_extra %}
+<meta name="description" content="Practical roadmap to master data structures and algorithms: arrays, linked lists, trees, graphs, sorting, searching, complexity analysis, and time-tested study strategies for students and interview preparation.">
+<meta name="keywords" content="data structures, algorithms, complexity, sorting, searching, graphs, trees, dynamic programming, interview preparation">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/blog.css') }}">
+{% endblock %}
+
+{% block content %}
+<article class="blog-article">
+  <div class="article-hero">
+    <div class="container article-hero-inner">
+      <div class="hero-left">
+        <nav class="breadcrumb">
+          <a href="{{ url_for('home') }}">Home</a>
+          <i class="fas fa-chevron-right"></i>
+          <a href="{{ url_for('blog') }}">Blog</a>
+          <i class="fas fa-chevron-right"></i>
+          <span>Mastering Algorithms & Data Structures</span>
+        </nav>
+
+        <h1 class="article-title">Mastering Data Structures & Algorithms: A Practical Roadmap</h1>
+
+        <div class="post-meta">
+          <span><i class="far fa-calendar"></i> January 5, 2025</span>
+          <span><i class="far fa-clock"></i> ~25 min read</span>
+          <span class="tags">
+            <span class="tag">Algorithms</span>
+            <span class="tag">Data Structures</span>
+            <span class="tag">Interview Prep</span>
+          </span>
+        </div>
+
+        <p class="lead">Data structures and algorithms (DSA) are the foundation of efficient software. This guide gives you a practical study path, explains core structures and algorithm families, contains worked examples, complexity analysis, and a plan to prepare for real-world problems and interviews.</p>
+      </div>
+
+      <div class="hero-right">
+        <div class="toc-card">
+          <div class="toc-title">Table of Contents</div>
+          <ol class="toc-list">
+            <li><a href="#why-dsa">Why DSA matters</a></li>
+            <li><a href="#thinking">How to think about algorithms</a></li>
+            <li><a href="#core-structures">Core data structures</a></li>
+            <li><a href="#sorting">Sorting & searching</a></li>
+            <li><a href="#graph-tree">Trees & graphs</a></li>
+            <li><a href="#dp">Dynamic programming</a></li>
+            <li><a href="#patterns">Problem-solving patterns</a></li>
+            <li><a href="#practice-plan">A 12-week practical study plan</a></li>
+            <li><a href="#worked">Worked example: shortest path</a></li>
+            <li><a href="#interview-tips">Interview tips</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#takeaways">Key takeaways</a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container article-body">
+    <main class="content">
+
+      <section id="why-dsa">
+        <h2>Why data structures & algorithms matter</h2>
+        <p>At its core, software engineering is about processing data correctly and efficiently. DSA skills let you select the right representation for data and the right approach to transform it. Good choices turn a slow program into a scalable one; poor choices lead to fragile, slow systems.</p>
+
+        <p>Employers and interviewers test DSA because it reveals problem decomposition, trade-off reasoning, and code quality under constraints. But beyond interviews, mastering DSA improves everyday engineering: faster queries, less memory, and clearer reasoning about edge cases.</p>
+      </section>
+
+      <section id="thinking">
+        <h2>How to think about algorithms</h2>
+        <p>Algorithmic thinking is a process: define the problem, identify constraints, pick a model, and analyze time and space. Break down problems into smaller subproblems and ask whether a greedy choice, recursion, or dynamic programming is appropriate.</p>
+
+        <p>Always reason about complexity. Use Big-O to categorize algorithms by growth rates. For example, O(n log n) is significantly better than O(n²) for large n, even if constant factors differ. But also consider constants and memory in practical contexts.</p>
+      </section>
+
+      <section id="core-structures">
+        <h2>Core data structures — what you must know</h2>
+
+        <h3>Arrays / Lists</h3>
+        <p>Contiguous memory. O(1) index access. Good for random access and iteration. Inserts/removals at the end are cheap (amortized O(1)), while insert/delete at arbitrary positions are O(n).</p>
+
+        <h3>Linked lists</h3>
+        <p>Singly/doubly linked lists provide O(1) insertion/removal at known positions but O(n) access. Useful when you need stable iterators or frequent insert/delete at arbitrary positions without reallocation.</p>
+
+        <h3>Stacks & Queues</h3>
+        <p>Abstract data types — LIFO and FIFO. Implemented via arrays (lists) or deques. Core for recursion simulation (stack) and breadth-first traversal (queue).</p>
+
+        <h3>Hash tables (dictionaries / maps)</h3>
+        <p>Provide average O(1) lookup/insert/delete via hashing. Essential for frequency counts, memoization, and fast membership tests. Understand collision handling and how keys must be hashable.</p>
+
+        <h3>Trees (binary trees, heaps, BST)</h3>
+        <p>Trees model hierarchical data. Binary search trees (BST) support ordered operations; balanced BSTs (AVL, red-black trees) guarantee O(log n) operations. Heaps support priority queues with O(log n) push/pop.</p>
+
+        <h3>Graphs</h3>
+        <p>Graphs model relationships. Representations: adjacency matrix (dense) vs adjacency list (sparse). Know BFS, DFS, shortest path (Dijkstra), and MST algorithms (Kruskal, Prim).</p>
+
+        <h3>Tries, Bloom filters, suffix arrays</h3>
+        <p>Specialized structures for string operations, probabilistic membership (Bloom filters), and substring queries. Learn them as needed for domain problems.</p>
+      </section>
+
+      <section id="sorting">
+        <h2>Sorting & searching</h2>
+        <p>Sorting is fundamental. Common algorithms:</p>
+        <ul>
+          <li><strong>QuickSort</strong> — average O(n log n), worst O(n²), good cache behavior.</li>
+          <li><strong>MergeSort</strong> — O(n log n) stable, needs extra memory.</li>
+          <li><strong>HeapSort</strong> — O(n log n) in-place.</li>
+        </ul>
+
+        <h3>Binary search</h3>
+        <p>Binary search works on sorted arrays: O(log n) to find an element or first position satisfying a predicate. Many problems reduce to a binary search on answer or position — learn to see the pattern.</p>
+
+        <pre><code># Example: binary search for first >= target (Python)
+def lower_bound(a, target):
+    lo, hi = 0, len(a)
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if a[mid] < target:
+            lo = mid + 1
+        else:
+            hi = mid
+    return lo</code></pre>
+      </section>
+
+      <section id="graph-tree">
+        <h2>Trees & graphs — core algorithms</h2>
+        <p>Two traversal foundations:</p>
+        <ul>
+          <li><strong>BFS (Breadth-First Search)</strong> — finds shortest path in unweighted graphs, layer by layer.</li>
+          <li><strong>DFS (Depth-First Search)</strong> — useful for connectivity, topological sort, and exploring states.</li>
+        </ul>
+
+        <h3>Dijkstra (single-source shortest path)</h3>
+        <p>For non-negative weights, Dijkstra with a priority queue runs in O((V+E) log V). For dense graphs alternative implementations may be preferable.</p>
+
+        <h3>Topological sort & DAGs</h3>
+        <p>Topological ordering solves tasks scheduling when dependencies exist (DAG). Implement via DFS or Kahn’s algorithm (in-degree queue).</p>
+      </section>
+
+      <section id="dp">
+        <h2>Dynamic programming (DP)</h2>
+        <p>DP transforms exponential recursion into polynomial-time solutions by storing intermediate results (memoization) or building tables (tabulation). Think in terms of states and transitions.</p>
+
+        <h3>Common DP types</h3>
+        <ul>
+          <li><strong>Knapsack / subset</strong></li>
+          <li><strong>Longest increasing subsequence (LIS)</strong></li>
+          <li><strong>Sequence alignment / edit distance</strong></li>
+        </ul>
+
+        <h3>Approach</h3>
+        <ol>
+          <li>Define state (parameters that uniquely identify subproblem).</li>
+          <li>Write recurrence relation.</li>
+          <li>Choose memoization (top-down) or tabulation (bottom-up) and analyze complexity.</li>
+        </ol>
+
+        <pre><code># Example: Fibonacci with memoization (Python)
+from functools import lru_cache
+
+@lru_cache(None)
+def fib(n):
+    if n < 2: return n
+    return fib(n-1) + fib(n-2)</code></pre>
+      </section>
+
+      <section id="patterns">
+        <h2>Problem-solving patterns</h2>
+        <p>Recognizing patterns is more important than memorizing solutions. Key patterns:</p>
+        <ul>
+          <li><strong>Two pointers</strong> — for sorted arrays and partitioning.</li>
+          <li><strong>Sliding window</strong> — continuous subarray problems with variable window size.</li>
+          <li><strong>Divide and conquer</strong> — e.g., mergesort, quickselect.</li>
+          <li><strong>Greedy</strong> — short-sighted choices that are globally optimal (proof required).</li>
+          <li><strong>Backtracking</strong> — for combinatorial search (N-Queens, permutations).</li>
+        </ul>
+
+        <p>Practice mapping problems to these patterns and then customizing data structures accordingly.</p>
+      </section>
+
+      <section id="practice-plan">
+        <h2>A 12-week practical study plan</h2>
+        <p>This plan assumes 6–10 hours/week. Adjust pace to fit your schedule.</p>
+
+        <h3>Weeks 1–2: Foundations</h3>
+        <ul>
+          <li>Arrays, strings, two pointers, sliding window.</li>
+          <li>Solve easy/medium problems on these topics until comfortable.</li>
+        </ul>
+
+        <h3>Weeks 3–4: Hashing & sorting</h3>
+        <ul>
+          <li>Hash maps, frequency counting, sorting algorithms, binary search patterns.</li>
+        </ul>
+
+        <h3>Weeks 5–6: Trees & recursion</h3>
+        <ul>
+          <li>Binary trees, recursion practice, tree traversals, basic BST operations.</li>
+        </ul>
+
+        <h3>Weeks 7–8: Graphs & BFS/DFS</h3>
+        <ul>
+          <li>Graph representations, BFS/DFS, shortest paths (Dijkstra), topological sort.</li>
+        </ul>
+
+        <h3>Weeks 9–10: Dynamic programming</h3>
+        <ul>
+          <li>Practice classic DP problems; start with memoization, then tabulation.</li>
+        </ul>
+
+        <h3>Weeks 11–12: Advanced & interview prep</h3>
+        <ul>
+          <li>Heaps, tries, union-find, segment trees (optional), mock interviews, timed problem sets.</li>
+        </ul>
+
+        <p>Daily habit: solve 1–2 problems, review solutions, and write down patterns. Weekly: time-box a mock interview and analyze weak spots.</p>
+      </section>
+
+      <section id="worked">
+        <h2>Worked example: shortest path (Dijkstra)</h2>
+        <p>Problem: given a weighted graph with non-negative weights, compute shortest path distances from source S.</p>
+
+        <h3>Idea</h3>
+        <p>Use a min-priority queue keyed by tentative distance. Start with distance[S]=0, push neighbors, and relax edges. Once a node is popped with its final distance, it will not decrease further.</p>
+
+        <pre><code>import heapq
+
+def dijkstra(adj, source):
+    # adj: {u: [(v, w), ...]}
+    INF = 10**18
+    dist = {u: INF for u in adj}
+    dist[source] = 0
+    pq = [(0, source)]
+    while pq:
+        d, u = heapq.heappop(pq)
+        if d > dist[u]: continue
+        for v, w in adj[u]:
+            nd = d + w
+            if nd < dist[v]:
+                dist[v] = nd
+                heapq.heappush(pq, (nd, v))
+    return dist</code></pre>
+
+        <p>Complexity: O((V + E) log V) with a binary heap. Verify correctness by reasoning about relaxations and finishing times.</p>
+      </section>
+
+      <section id="interview-tips">
+        <h2>Interview tips — practical advice</h2>
+        <ul>
+          <li><strong>Clarify the problem:</strong> ask about inputs, constraints, and edge cases.</li>
+          <li><strong>Brute force first:</strong> propose a correct but possibly slow solution, then optimize.</li>
+          <li><strong>Discuss complexity:</strong> explain time and space costs and trade-offs.</li>
+          <li><strong>Test with examples:</strong> run through edge cases and small examples on paper or whiteboard.</li>
+          <li><strong>Communicate constantly:</strong> narrate your thought process; interviewers value clear reasoning.</li>
+        </ul>
+      </section>
+
+      <section id="faq">
+        <h2>FAQ</h2>
+
+        <h3>Q: Should I memorize solutions?</h3>
+        <p>A: No. Memorizing patterns and templates is helpful, but focus on understanding why a solution works and how to adapt patterns to novel problems.</p>
+
+        <h3>Q: How many problems should I solve weekly?</h3>
+        <p>A: Quality over quantity. Initially aim for 6–10 focused problems weekly with careful review. Over time increase frequency and add timed sessions.</p>
+
+        <h3>Q: Which language is best for learning DSA?</h3>
+        <p>A: Use a language you're comfortable with and that is expressive for data structures — Python is great for prototyping; C++ is common in contests and interview environments due to STL performance.</p>
+      </section>
+
+      <section id="takeaways">
+        <h2>Key takeaways</h2>
+        <ul>
+          <li>Master core data structures first (arrays, hash tables, trees, graphs) and their complexity trade-offs.</li>
+          <li>Practice patterns (two pointers, sliding window, divide & conquer, DP) rather than memorizing solutions.</li>
+          <li>Measure and reason about complexity; write tests and small benchmarks when relevant.</li>
+          <li>Follow a structured study plan and include timed mock interviews to build speed and confidence.</li>
+        </ul>
+
+        <p>DSA mastery is a marathon, not a sprint. Consistent, deliberate practice — combined with understanding — will make you confident and capable in engineering and interviews alike.</p>
+      </section>
+
+    </main>
+
+    <aside class="sidebar">
+      <div class="related">
+        <h3>Related articles</h3>
+        <a class="related-link" href="{{ url_for('blog_post', post_slug='python-data-structures-guide') }}">
+          <strong>Python Data Structures: Lists, Dictionaries & Sets</strong>
+          <p class="excerpt">Choose the right container for performance and clarity.</p>
+        </a>
+        <a class="related-link" href="{{ url_for('blog_post', post_slug='debugging-techniques-students') }}">
+          <strong>Debugging Techniques</strong>
+          <p class="excerpt">Systematic ways to find and fix defects efficiently.</p>
+        </a>
+      </div>
+
+      <div class="cta-card">
+        <h4>Practice challenge</h4>
+        <p>Implement Dijkstra and A* for a grid map; compare performance and experiment with heuristics. Time yourself and add tests for edge cases like disconnected nodes.</p>
+      </div>
+    </aside>
+  </div>
+</article>
+{% endblock %}

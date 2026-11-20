@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+{% block title %}Top 10 Debugging Techniques Every Student Should Master | EduGen AI{% endblock %}
+
+{% block favicon %}
+<link rel="icon" type="image/png" href="{{ url_for('static', filename='icons/home.png') }}">
+{% endblock %}
+
+{% block head_extra %}
+<meta name="description" content="Comprehensive, practical debugging guide for students and junior developers. Learn systematic debugging workflows, tools (GDB, pdb, Valgrind, ASan), logging, testing, and strategies to find and fix bugs efficiently.">
+<meta name="keywords" content="debugging techniques, gdb, pdb, valgrind, address sanitizer, unit testing, git bisect, debugging strategies">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/blog.css') }}">
+{% endblock %}
+
+{% block content %}
+<article class="blog-article">
+  <div class="article-hero">
+    <div class="container article-hero-inner">
+      <div class="hero-left">
+        <nav class="breadcrumb">
+          <a href="{{ url_for('home') }}">Home</a>
+          <i class="fas fa-chevron-right"></i>
+          <a href="{{ url_for('blog') }}">Blog</a>
+          <i class="fas fa-chevron-right"></i>
+          <span>Debugging Techniques</span>
+        </nav>
+
+        <h1 class="article-title">Top 10 Debugging Techniques Every Student Should Master</h1>
+
+        <div class="post-meta">
+          <span><i class="far fa-calendar"></i> January 10, 2025</span>
+          <span><i class="far fa-clock"></i> ~22 min read</span>
+          <span class="tags">
+            <span class="tag">Debugging</span>
+            <span class="tag">Testing</span>
+            <span class="tag">Tools</span>
+          </span>
+        </div>
+
+        <p class="lead">Good debugging skills separate competent programmers from great ones. This guide teaches a structured approach to debugging, effective tools and workflows, and practical patterns you can apply immediately to find and fix defects faster and more reliably.</p>
+      </div>
+
+      <div class="hero-right">
+        <div class="toc-card">
+          <div class="toc-title">Table of Contents</div>
+          <ol class="toc-list">
+            <li><a href="#mindset">Adopt the debugging mindset</a></li>
+            <li><a href="#reproduce">Reproduce reliably</a></li>
+            <li><a href="#read-error">Read error messages & stack traces</a></li>
+            <li><a href="#minimal">Create a minimal reproducer</a></li>
+            <li><a href="#print-debugging">Print debugging with intent</a></li>
+            <li><a href="#interactive">Use interactive debuggers (GDB/pdb)</a></li>
+            <li><a href="#sanitizers">Use sanitizers & memory tools</a></li>
+            <li><a href="#bisect">Use version-control bisect</a></li>
+            <li><a href="#tests">Unit tests and regression tests</a></li>
+            <li><a href="#automation">Logging, monitoring, and automation</a></li>
+            <li><a href="#code-review">Code reviews & pair debugging</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#takeaways">Key takeaways & practice</a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container article-body">
+    <main class="content">
+
+      <section id="mindset">
+        <h2>Adopt the debugging mindset</h2>
+        <p>Debugging is a disciplined process: reproduce, isolate, hypothesize, test, fix, and verify. Before typing a single change, aim to <strong>understand</strong> the problem. Good debugging is investigative work — think like a detective: gather evidence, form hypotheses, and rule them out methodically.</p>
+
+        <figure>
+          <img src="{{ url_for('static', filename='images/debugging-workflow-placeholder.png') }}" alt="Debugging workflow diagram" style="width:100%;border-radius:8px;">
+          <figcaption>Figure: A disciplined debugging workflow — reproduce, isolate, hypothesize, test, fix, verify.</figcaption>
+        </figure>
+      </section>
+
+      <section id="reproduce">
+        <h2>1 — Reproduce reliably</h2>
+        <p>If you cannot reproduce a bug reliably, you cannot debug it effectively. Ask:</p>
+        <ul>
+          <li>What exact inputs trigger the bug?</li>
+          <li>What steps did the user take?</li>
+          <li>Does it depend on environment, timing, or dataset size?</li>
+        </ul>
+        <p>Record concrete reproduction steps, including platform, versions, and any config. If the bug is intermittent, try to find a pattern — concurrency, memory pressure, or network flakiness are common culprits.</p>
+      </section>
+
+      <section id="read-error">
+        <h2>2 — Read error messages & stack traces</h2>
+        <p>Stack traces and error messages are evidence, not answers. Read them carefully: file names, line numbers, and specific exception types narrow down where things went wrong. Always start by examining the first failing line and work outward.</p>
+
+        <pre><code>Traceback (most recent call last):
+  File "app.py", line 42, in &lt;module&gt;
+    result = process(data)
+  File "app.py", line 20, in process
+    return data['items'][0]['name']
+KeyError: 'items'</code></pre>
+
+        <p>In the example above, the KeyError indicates <code>'items'</code> is missing; check how <code>data</code> is constructed or validated.</p>
+      </section>
+
+      <section id="minimal">
+        <h2>3 — Create a minimal reproducer</h2>
+        <p>Strip the problem down to the smallest code that reproduces it. Minimal repros make it easier to reason about the bug and isolate the root cause.</p>
+        <p>Tips for minimal repros:</p>
+        <ul>
+          <li>Remove unrelated modules and dependencies.</li>
+          <li>Replace external inputs with small mocks.</li>
+          <li>Make the test deterministic (seed random, use fixed time).</li>
+        </ul>
+
+        <p>Minimal repros also make it easier to ask for help — include a short, self-contained example when posting to forums or showing a teammate.</p>
+      </section>
+
+      <section id="print-debugging">
+        <h2>4 — Print debugging with intent</h2>
+        <p>Strategic logging / printing remains one of the fastest ways to pinpoint issues. But avoid scattershot prints — use contextual messages and inspect variable shapes, types, and key invariants.</p>
+
+        <pre><code># Bad: vague
+print("here")
+
+# Better: state + value
+print(f"process() input size={len(items)} first={items[0] if items else None}")</code></pre>
+
+        <p>For production systems, use a proper logging framework (Python's <code>logging</code>, or structured logging) with log levels. This enables turning up verbosity when needed without redeploying.</p>
+
+        <figure>
+          <img src="{{ url_for('static', filename='images/logging-example-placeholder.png') }}" alt="Example of structured logging" style="width:100%;border-radius:8px;">
+          <figcaption>Figure: Structured logs are searchable and include context (request id, user id, timestamp).</figcaption>
+        </figure>
+      </section>
+
+      <section id="interactive">
+        <h2>5 — Use interactive debuggers (GDB, pdb, IDEs)</h2>
+        <p>Interactive debuggers let you set breakpoints, step into functions, inspect variables, and modify state at runtime. Learn at least one debugger for your language and one IDE or CLI debugger.</p>
+
+        <h3>Python: pdb</h3>
+        <pre><code>import pdb
+
+def bug(x):
+    pdb.set_trace()  # pause and open interactive REPL
+    return x + 1</code></pre>
+
+        <h3>C/C++: GDB</h3>
+        <pre><code>// compile with debug symbols
+g++ -g -O0 program.cpp -o program
+gdb ./program
+(gdb) break main
+(gdb) run
+(gdb) next
+(gdb) print var</code></pre>
+
+        <p>IDEs (VSCode, CLion, PyCharm) provide graphical debugger experiences that are easier to learn initially — use them to accelerate your productivity.</p>
+      </section>
+
+      <section id="sanitizers">
+        <h2>6 — Use sanitizers & memory tools (Valgrind, ASan)</h2>
+        <p>Memory errors (use-after-free, buffer overflow, leaks) are common in lower-level languages. Tools like Valgrind and AddressSanitizer (ASan) detect these issues quickly.</p>
+
+        <pre><code>// AddressSanitizer (GCC / Clang)
+g++ -g -fsanitize=address -O1 program.cpp -o program
+./program
+
+// Valgrind (Linux)
+valgrind --leak-check=full ./program</code></pre>
+
+        <p>Run tests under sanitizers during development; treat sanitizer output as high-priority bugs.</p>
+      </section>
+
+      <section id="bisect">
+        <h2>7 — Use version-control bisect (git bisect)</h2>
+        <p>If a regression was introduced recently, <code>git bisect</code> finds the exact commit that introduced the failure via binary search. This saves enormous time versus manual guessing.</p>
+
+        <pre><code>git bisect start
+git bisect bad  # current commit
+git bisect good v1.2.0
+# run tests, mark 'good' or 'bad' until bisect finds commit</code></pre>
+
+        <p>Bisect works best when you have a reliable reproduction or automated test that fails on the regression commit.</p>
+      </section>
+
+      <section id="tests">
+        <h2>8 — Unit tests & regression tests</h2>
+        <p>Tests are your best long-term defense. Write a unit test once you identify a bug — that test prevents regressions and documents the expected behavior.</p>
+
+        <pre><code>def test_process_handles_empty():
+    assert process({}) == expected_result</code></pre>
+
+        <p>Use continuous integration (CI) to run tests on each PR. When fixing a bug, add a regression test so the bug does not reappear later.</p>
+      </section>
+
+      <section id="automation">
+        <h2>9 — Logging, monitoring & automation</h2>
+        <p>For deployed systems, reproduce is not always possible locally. Good logging, structured traces (request / correlation IDs), and monitoring (metrics, alerts) let you collect enough context to debug production issues.</p>
+
+        <ul>
+          <li>Correlate logs with request IDs for end-to-end traces.</li>
+          <li>Collect metrics (error rates, latency percentiles) and set alerts.</li>
+          <li>Use feature flags to roll back risky changes quickly.</li>
+        </ul>
+      </section>
+
+      <section id="code-review">
+        <h2>10 — Code reviews & pair debugging</h2>
+        <p>Two heads are better than one. A fresh pair of eyes during code reviews often spots logic errors you missed. Pair debugging (shared screen or in-person) helps transfer knowledge and quickly converges on root causes.</p>
+
+        <p>Use reviews not only to catch bugs but to improve clarity — better readability reduces future bugs.</p>
+      </section>
+
+      <section id="examples">
+        <h2>Worked example: tracking down a memory leak</h2>
+        <p>Scenario: a C++ service slowly grows RAM usage over time. Quick approach:</p>
+        <ol>
+          <li>Reproduce with a short, accelerated workload locally.</li>
+          <li>Run under Valgrind or ASan to catch leaks.</li>
+          <li>Use heap profilers (e.g., <code>heaptrack</code>, <code>massif</code>) to find allocation hotspots.</li>
+          <li>Inspect code paths and ownership patterns; replace raw pointers with smart pointers if appropriate.</li>
+        </ol>
+
+        <p>This reproducible, tool-driven approach finds leaks much faster than random code inspection.</p>
+      </section>
+
+      <section id="faq">
+        <h2>FAQ</h2>
+
+        <h3>Q: Should I always write tests before debugging?</h3>
+        <p>A: When possible, write a minimal test that reproduces the bug. Tests make debugging repeatable and help verify fixes.</p>
+
+        <h3>Q: How do I debug intermittent concurrency issues?</h3>
+        <p>A: Reproduce deterministically with stress tests, add thread sanitizer (<code>-fsanitize=thread</code>), log thread interleavings, and use targeted instrumentation.</p>
+
+        <h3>Q: When should I use print debugging vs. a debugger?</h3>
+        <p>A: Use print/logging when quick inspection suffices or in environments where interactive debugging is hard. Use debuggers for complex state, stepping, and variable inspection.</p>
+      </section>
+
+      <section id="takeaways">
+        <h2>Key takeaways & practice</h2>
+        <ul>
+          <li>Always reproduce reliably and create minimal repros — they make debugging tractable.</li>
+          <li>Master at least one interactive debugger and one memory/tooling workflow (ASan/Valgrind).</li>
+          <li>Write unit/regression tests for every bug fix to prevent regression.</li>
+          <li>Use logging and monitoring to collect production evidence when local reproduction is impossible.</li>
+          <li>Practice: take two bugs from your past projects, create minimal repros, and fix them while adding regression tests.</li>
+        </ul>
+
+        <p>Debugging is a skill improved with practice. The techniques above form a toolkit — apply them consistently, and debugging will become faster, less stressful, and more reliable.</p>
+      </section>
+
+    </main>
+
+    <aside class="sidebar">
+      <div class="related">
+        <h3>Related articles</h3>
+        <a class="related-link" href="{{ url_for('blog_post', post_slug='python-data-structures-guide') }}">
+          <strong>Python Data Structures Guide</strong>
+          <p class="excerpt">Choose efficient structures to avoid logic bugs and slow code.</p>
+        </a>
+        <a class="related-link" href="{{ url_for('blog_post', post_slug='version-control-git-github') }}">
+          <strong>Version Control with Git & GitHub</strong>
+          <p class="excerpt">Use git bisect to find regression commits quickly.</p>
+        </a>
+      </div>
+
+      <div class="cta-card">
+        <h4>Practice challenge</h4>
+        <p>Pick a small project with failing tests. Create a minimal reproducible test, run it under a sanitizer or debugger, fix the bug, and add a regression test. Document steps in a short README.</p>
+      </div>
+    </aside>
+  </div>
+</article>
+{% endblock %}

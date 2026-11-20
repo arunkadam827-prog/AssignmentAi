@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+{% block title %}Version Control with Git & GitHub: Essential Guide for Students | EduGen AI{% endblock %}
+
+{% block favicon %}
+<link rel="icon" type="image/png" href="{{ url_for('static', filename='icons/home.png') }}">
+{% endblock %}
+
+{% block head_extra %}
+<meta name="description" content="Comprehensive guide to version control with Git and GitHub. Learn core Git concepts, branching & merging, collaboration workflows, pull requests, rebasing, resolving conflicts, and best practices for teams and students.">
+<meta name="keywords" content="git tutorial, github, version control, branching, pull request, git rebase, merge conflicts, git workflows">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/blog.css') }}">
+{% endblock %}
+
+{% block content %}
+<article class="blog-article">
+  <div class="article-hero">
+    <div class="container article-hero-inner">
+      <div class="hero-left">
+        <nav class="breadcrumb">
+          <a href="{{ url_for('home') }}">Home</a>
+          <i class="fas fa-chevron-right"></i>
+          <a href="{{ url_for('blog') }}">Blog</a>
+          <i class="fas fa-chevron-right"></i>
+          <span>Version Control with Git & GitHub</span>
+        </nav>
+
+        <h1 class="article-title">Version Control with Git & GitHub: Essential Guide for Students</h1>
+
+        <div class="post-meta">
+          <span><i class="far fa-calendar"></i> December 30, 2024</span>
+          <span><i class="far fa-clock"></i> ~22 min read</span>
+          <span class="tags">
+            <span class="tag">Git</span>
+            <span class="tag">GitHub</span>
+            <span class="tag">Version Control</span>
+          </span>
+        </div>
+
+        <p class="lead">Version control is a required skill for any developer. Git is the industry-standard distributed VCS and GitHub is the most popular hosting and collaboration platform. This guide explains core Git concepts, practical workflows, troubleshooting, and best practices you can use on assignments, personal projects, and in teams.</p>
+      </div>
+
+      <div class="hero-right">
+        <div class="toc-card">
+          <div class="toc-title">Table of Contents</div>
+          <ol class="toc-list">
+            <li><a href="#why-vc">Why version control matters</a></li>
+            <li><a href="#git-basics">Git basics: commits, branches, history</a></li>
+            <li><a href="#remote-repos">Remote repositories & GitHub</a></li>
+            <li><a href="#branches-workflows">Branching strategies & workflows</a></li>
+            <li><a href="#pull-requests">Pull requests & code review</a></li>
+            <li><a href="#merge-vs-rebase">Merge vs Rebase</a></li>
+            <li><a href="#conflicts">Resolving merge conflicts</a></li>
+            <li><a href="#best-practices">Best practices</a></li>
+            <li><a href="#troubleshooting">Troubleshooting common issues</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#takeaways">Key takeaways & next steps</a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container article-body">
+    <main class="content">
+
+      <section id="why-vc">
+        <h2>Why version control matters</h2>
+        <p>Version control systems let you track changes to files, revert to previous states, collaborate safely, and maintain a history of your project. For students, version control provides a safety net for experiments, a record of progress for assignments, and a professional workflow that employers expect.</p>
+
+        <figure>
+          <img src="{{ url_for('static', filename='images/git-flow-placeholder.png') }}" alt="Git workflow diagram" style="width:100%;border-radius:8px;">
+          <figcaption>Figure: Typical Git workflow — create branches, make commits, open pull requests, merge to main.</figcaption>
+        </figure>
+      </section>
+
+      <section id="git-basics">
+        <h2>Git basics: commits, branches, and history</h2>
+        <p>Git stores snapshots of your repository as commits. Each commit has a message, author, timestamp, and a pointer to its parent(s). Learn a few core commands and the concepts they represent.</p>
+
+        <h3>Initialize and make your first commit</h3>
+        <pre><code># create repository
+git init
+
+# stage files and commit
+git add .
+git commit -m "Initial commit"</code></pre>
+
+        <h3>View history</h3>
+        <pre><code>git log --oneline --graph --decorate --all</code></pre>
+        <p>This command shows a compact, visual history with branches and tags.</p>
+
+        <h3>Branches</h3>
+        <p>Branches are lightweight pointers to commits. Use branches to work on features without affecting the main codebase.</p>
+        <pre><code># create and switch to a branch
+git checkout -b feature/login
+
+# list branches
+git branch</code></pre>
+
+        <p>Commit frequently with clear messages — each commit should represent a small, testable change.</p>
+      </section>
+
+      <section id="remote-repos">
+        <h2>Remote repositories & GitHub</h2>
+        <p>Remote hosting platforms (GitHub, GitLab, Bitbucket) store your repository online, enable collaboration, and provide issue tracking and CI/CD integration. To connect a local repo to GitHub:</p>
+
+        <pre><code># create repo on GitHub, then connect locally
+git remote add origin git@github.com:username/repo.git
+git push -u origin main</code></pre>
+
+        <p>Use SSH keys for secure authentication. GitHub also supports HTTPS with token-based authentication.</p>
+      </section>
+
+      <section id="branches-workflows">
+        <h2>Branching strategies & workflows</h2>
+        <p>Choose a workflow that matches your project and team. A few common ones:</p>
+
+        <h3>GitHub Flow (simple)</h3>
+        <ul>
+          <li>main branch always deployable</li>
+          <li>create short-lived feature branches</li>
+          <li>open pull requests and merge after review</li>
+        </ul>
+
+        <h3>Git Flow (release-based)</h3>
+        <ul>
+          <li>main and develop branches</li>
+          <li>feature, release, and hotfix branches</li>
+          <li>useful for teams with formal release cycles</li>
+        </ul>
+
+        <h3>Trunk-based Development</h3>
+        <p>Developers integrate small, frequent changes directly into trunk (main) often behind feature flags. This emphasizes CI and fast feedback.</p>
+
+        <p>For most student projects and small teams, <strong>GitHub Flow</strong> is recommended for simplicity and clarity.</p>
+      </section>
+
+      <section id="pull-requests">
+        <h2>Pull requests & code review</h2>
+        <p>Pull requests (PRs) are the mechanism for proposing changes and requesting reviews. A good PR is small, focused, and includes a clear description and testing instructions.</p>
+
+        <h3>Creating a PR</h3>
+        <pre><code># push a branch then open a PR on GitHub
+git push origin feature/login</code></pre>
+
+        <p>Checklist for high-quality PRs:</p>
+        <ul>
+          <li>Reference the issue or task it addresses</li>
+          <li>Explain the intent and high-level approach</li>
+          <li>List visible changes and any required setup</li>
+          <li>Include tests or screenshots when relevant</li>
+        </ul>
+
+        <p>Use code review to catch design and logic issues, suggest improvements, and share knowledge across the team.</p>
+      </section>
+
+      <section id="merge-vs-rebase">
+        <h2>Merge vs Rebase — what to choose</h2>
+        <p>When integrating changes from one branch into another, you can merge or rebase. Each has different effects on history.</p>
+
+        <h3>Merge</h3>
+        <p><code>git merge</code> creates a merge commit and preserves the branch history. It’s explicit and safe for shared branches.</p>
+        <pre><code>git checkout main
+git merge feature/login</code></pre>
+
+        <h3>Rebase</h3>
+        <p><code>git rebase</code> rewrites commits to appear as if they were created on top of another base. It produces a linear history but rewrites commit hashes (don’t rebase public/shared branches).</p>
+        <pre><code># rebase feature onto latest main
+git checkout feature/login
+git fetch origin
+git rebase origin/main
+
+# resolve conflicts, then
+git rebase --continue</code></pre>
+
+        <p>Recommended rule: <strong>merge public branches, rebase local, private branches</strong> if you prefer linear history.</p>
+      </section>
+
+      <section id="conflicts">
+        <h2>Resolving merge conflicts</h2>
+        <p>Conflicts occur when the same lines in the same files were changed differently. Git marks conflicts in the file — you must edit to reconcile and then complete the merge or rebase.</p>
+
+        <pre><code><<<<<<< HEAD
+// your changes
+=======
+ // incoming changes
+>>>>>>> feature/login</code></pre>
+
+        <p>Resolve by choosing or combining changes, then:</p>
+        <pre><code>git add <file>
+git commit    # if merging
+git rebase --continue  # if rebasing</code></pre>
+
+        <p>Use tools like VS Code’s merge editor, <code>git mergetool</code>, or specialized merge GUIs for complex conflicts.</p>
+      </section>
+
+      <section id="best-practices">
+        <h2>Best practices for students & teams</h2>
+        <ul>
+          <li><strong>Write clear commit messages:</strong> start with a short summary line (50 chars), add a blank line, then a longer description if needed.</li>
+          <li><strong>Commit small, logical units:</strong> one change = one commit.</li>
+          <li><strong>Use .gitignore:</strong> avoid committing build artifacts, credentials, or environment files.</li>
+          <li><strong>Protect main branch:</strong> require PR reviews and passing CI before merging.</li>
+          <li><strong>Keep branches short-lived:</strong> merge back frequently to avoid large conflicts.</li>
+          <li><strong>Use tags and releases:</strong> tag stable versions for reproducible builds.</li>
+        </ul>
+
+        <pre><code># example .gitignore
+__pycache__/
+node_modules/
+.env
+.DS_Store</code></pre>
+      </section>
+
+      <section id="troubleshooting">
+        <h2>Troubleshooting common Git issues</h2>
+
+        <h3>1. I accidentally committed sensitive data</h3>
+        <p>Remove it from history using <code>git filter-repo</code> or <code>BFG Repo-Cleaner</code>, then rotate the exposed credentials. Rewriting history requires a force-push and coordination with collaborators.</p>
+
+        <h3>2. I need to undo the last commit but keep changes</h3>
+        <pre><code>git reset --soft HEAD~1</code></pre>
+
+        <h3>3. I lost commits after a rebase or reset</h3>
+        <p>Use <code>git reflog</code> to find lost commit hashes and recover them.</p>
+        <pre><code>git reflog
+git checkout -b recover <commit-hash></code></pre>
+
+        <h3>4. Push rejected (non-fast-forward)</h3>
+        <p>Your local branch is behind remote. Fetch and merge/rebase before pushing.</p>
+        <pre><code>git fetch origin
+git rebase origin/main
+git push origin feature/login</code></pre>
+      </section>
+
+      <section id="faq">
+        <h2>FAQ</h2>
+
+        <h3>Q: Should I use Git GUI or CLI?</h3>
+        <p>A: Learn the CLI first — it reveals the conceptual model of commits and refs. Use GUIs or IDE integrations to speed up everyday tasks once you understand the CLI.</p>
+
+        <h3>Q: When should I rebase?</h3>
+        <p>A: Rebase when you want a clean linear history and your branch is local/private. Avoid rebasing commits already pushed and shared without coordination.</p>
+
+        <h3>Q: How many commits are too many?</h3>
+        <p>A: Prefer many small, well-described commits to one large commit. Small commits are easier to review, revert, and understand.</p>
+      </section>
+
+      <section id="takeaways">
+        <h2>Key takeaways & practice</h2>
+        <ul>
+          <li>Use branches to isolate work. Keep commits small and messages clear.</li>
+          <li>Adopt a simple workflow (GitHub Flow) for most projects.</li>
+          <li>Prefer CLI to learn fundamentals, then adopt GUI tools as productivity aids.</li>
+          <li>Practice resolving conflicts, using <code>git rebase</code> safely, and recovering from mistakes with <code>git reflog</code>.</li>
+        </ul>
+
+        <p><strong>Practice challenge:</strong> Fork a small open-source repo, create a feature branch, add a small improvement or fix, submit a pull request, and iterate on reviews. This hands-on flow builds confidence for team work and interviews.</p>
+      </section>
+
+    </main>
+
+    <aside class="sidebar">
+      <div class="related">
+        <h3>Related articles</h3>
+        <a class="related-link" href="{{ url_for('blog_post', post_slug='version-control-git-github') }}">
+          <strong>Version Control Best Practices</strong>
+          <p class="excerpt">More workflows and CI integration.</p>
+        </a>
+        <a class="related-link" href="{{ url_for('blog_post', post_slug='debugging-techniques-students') }}">
+          <strong>Debugging Techniques</strong>
+          <p class="excerpt">Use bisect to locate regressions fast.</p>
+        </a>
+      </div>
+
+      <div class="cta-card">
+        <h4>Practice challenge</h4>
+        <p>Create a repo for a small project. Practice branching, opening a pull request, responding to review comments, and merging. Try using both merge and rebase approaches to understand differences.</p>
+      </div>
+    </aside>
+  </div>
+</article>
+{% endblock %}

@@ -1,0 +1,318 @@
+{% extends "base.html" %}
+{% block title %}Object-Oriented Programming in Java: Complete Guide (Beginner → Advanced) | EduGen AI{% endblock %}
+
+{% block favicon %}
+<link rel="icon" type="image/png" href="{{ url_for('static', filename='icons/home.png') }}">
+{% endblock %}
+
+{% block head_extra %}
+<meta name="description" content="A practical, in-depth guide to Object-Oriented Programming (OOP) in Java. Learn encapsulation, inheritance, polymorphism, abstraction, design principles (SOLID), common patterns, and real-world examples with best practices.">
+<meta name="keywords" content="Java OOP, encapsulation, inheritance, polymorphism, abstraction, SOLID principles, design patterns, Java tutorial">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/blog.css') }}">
+{% endblock %}
+
+{% block content %}
+<article class="blog-article">
+  <div class="article-hero">
+    <div class="container article-hero-inner">
+      <div class="hero-left">
+        <nav class="breadcrumb">
+          <a href="{{ url_for('home') }}">Home</a>
+          <i class="fas fa-chevron-right"></i>
+          <a href="{{ url_for('blog') }}">Blog</a>
+          <i class="fas fa-chevron-right"></i>
+          <span>Object-Oriented Programming in Java</span>
+        </nav>
+
+        <h1 class="article-title">Object-Oriented Programming in Java: Complete Guide (Beginner → Advanced)</h1>
+
+        <div class="post-meta">
+          <span><i class="far fa-calendar"></i> January 8, 2025</span>
+          <span><i class="far fa-clock"></i> ~22 min read</span>
+          <span class="tags">
+            <span class="tag">Java</span>
+            <span class="tag">OOP</span>
+            <span class="tag">Design</span>
+          </span>
+        </div>
+
+        <p class="lead">Object-oriented programming (OOP) is the foundation of Java. This guide walks you from fundamental OOP concepts—encapsulation, inheritance, polymorphism, abstraction—to practical design patterns and SOLID principles. By the end you’ll be able to design clean, maintainable Java classes and recognize when to apply each technique in real projects.</p>
+      </div>
+
+      <div class="hero-right">
+        <div class="toc-card">
+          <div class="toc-title">Table of Contents</div>
+          <ol class="toc-list">
+            <li><a href="#why-oop">Why OOP matters</a></li>
+            <li><a href="#encapsulation">Encapsulation</a></li>
+            <li><a href="#inheritance">Inheritance</a></li>
+            <li><a href="#polymorphism">Polymorphism</a></li>
+            <li><a href="#abstraction">Abstraction & Interfaces</a></li>
+            <li><a href="#solids">SOLID principles</a></li>
+            <li><a href="#patterns">Common design patterns</a></li>
+            <li><a href="#practical-examples">Practical examples</a></li>
+            <li><a href="#testing-design">Testing & refactoring OOP code</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#takeaways">Key takeaways</a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container article-body">
+    <main class="content">
+
+      <section id="why-oop">
+        <h2>Why OOP matters in Java</h2>
+        <p>Java is designed around objects. OOP helps you model real-world entities, encapsulate behavior with data, and write modular code that scales. Well-applied OOP improves readability, reduces duplication, and makes systems easier to extend and test. The trade-off is designing the right abstractions — which is what this guide focuses on.</p>
+
+        <figure>
+          <img src="{{ url_for('static', filename='images/oop-concepts-placeholder.png') }}" alt="OOP core concepts diagram" style="width:100%;border-radius:8px;">
+          <figcaption>Figure: Four pillars of OOP — Encapsulation, Inheritance, Polymorphism, Abstraction.</figcaption>
+        </figure>
+      </section>
+
+      <section id="encapsulation">
+        <h2>Encapsulation — hiding implementation behind a clear interface</h2>
+        <p>Encapsulation groups data (fields) and behavior (methods) in classes and controls access using visibility modifiers. Use <code>private</code> for internals, <code>public</code> for stable API, and <code>protected</code> where subclass access is intentional.</p>
+
+        <h3>Example: a simple Student class</h3>
+        <pre><code>public class Student {
+    private String name;
+    private int year;
+
+    public Student(String name, int year) {
+        this.name = name;
+        this.year = year;
+    }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    public int getYear() { return year; }
+    public void advanceYear() { year++; }
+}</code></pre>
+
+        <p>Encapsulation reduces coupling: other classes interact with <code>Student</code> through its public methods rather than directly modifying fields.</p>
+
+        <h3>When to expose fields</h3>
+        <p>Prefer accessors. Exposing mutable fields breaks encapsulation and makes maintenance costly. If performance absolutely requires public fields, document ownership and invariants clearly.</p>
+      </section>
+
+      <section id="inheritance">
+        <h2>Inheritance — reuse and extension</h2>
+        <p>Inheritance lets a class inherit state and behavior from a parent class. In Java, use inheritance for <em>is-a</em> relationships. Prefer composition over inheritance for flexible design to avoid tight coupling.</p>
+
+        <h3>Example: Animal hierarchy</h3>
+        <pre><code>public class Animal {
+    public void eat() { System.out.println("eating"); }
+}
+
+public class Dog extends Animal {
+    public void bark() { System.out.println("woof"); }
+}</code></pre>
+
+        <p>Inheritance is powerful for polymorphism but can cause fragile base-class problems if parent classes change unexpectedly.</p>
+
+        <h3>Common pitfalls</h3>
+        <ul>
+          <li>Deep inheritance trees — they complicate reasoning.</li>
+          <li>Using inheritance to reuse code rather than represent true <em>is-a</em> relationships.</li>
+        </ul>
+      </section>
+
+      <section id="polymorphism">
+        <h2>Polymorphism — same interface, multiple behaviors</h2>
+        <p>Polymorphism allows different classes to be treated through a common type. This enables flexible code where behavior is selected at runtime.</p>
+
+        <h3>Example: method overriding</h3>
+        <pre><code>public class Animal {
+    public void speak() { System.out.println("..."); }
+}
+
+public class Cat extends Animal {
+    @Override
+    public void speak() { System.out.println("meow"); }
+}
+
+Animal a = new Cat();
+a.speak(); // prints "meow"</code></pre>
+
+        <p>Polymorphism is the core of patterns like Strategy and Factory. Use interfaces and abstract classes to define behavior contracts.</p>
+      </section>
+
+      <section id="abstraction">
+        <h2>Abstraction & Interfaces — define contracts, hide details</h2>
+        <p>Abstraction separates what an object does from how it does it. Java provides abstract classes and interfaces for this. Interfaces are the preferred way to define behavior contracts, especially with Java 8+ default methods.</p>
+
+        <h3>Interface example</h3>
+        <pre><code>public interface PaymentProcessor {
+    boolean process(Payment p);
+}
+
+public class StripeProcessor implements PaymentProcessor {
+    @Override
+    public boolean process(Payment p) {
+        // implementation details
+    }
+}</code></pre>
+
+        <p>Abstracting behavior via interfaces lets you swap implementations in tests (mocking) and at runtime (dependency injection).</p>
+      </section>
+
+      <section id="solids">
+        <h2>SOLID principles — guidelines for maintainable OOP</h2>
+        <p>SOLID is a mnemonic for five design principles that improve extensibility and maintainability:</p>
+        <dl>
+          <dt><strong>S</strong>ingle Responsibility Principle (SRP)</dt>
+          <dd>Each class should have one reason to change.</dd>
+
+          <dt><strong>O</strong>pen/Closed Principle (OCP)</dt>
+          <dd>Classes should be open for extension but closed for modification.</dd>
+
+          <dt><strong>L</strong>iskov Substitution Principle (LSP)</dt>
+          <dd>Subtypes must be substitutable for their base types without changing expected behavior.</dd>
+
+          <dt><strong>I</strong>nterface Segregation Principle (ISP)</dt>
+          <dd>Prefer small, specific interfaces over large, general ones.</dd>
+
+          <dt><strong>D</strong>ependency Inversion Principle (DIP)</dt>
+          <dd>Depend on abstractions, not concretions — use interfaces and injection.</dd>
+        </dl>
+
+        <h3>Concrete example — applying SRP</h3>
+        <p>Instead of a big <code>UserService</code> that handles persistence, validation, and notification, split responsibilities into <code>UserRepository</code>, <code>UserValidator</code>, and <code>UserNotifier</code>. This makes testing and evolution simpler.</p>
+      </section>
+      
+
+      <section id="patterns">
+        <h2>Common design patterns in Java</h2>
+        <p>Design patterns are proven templates for solving recurring design problems. A few patterns to know:</p>
+
+        <h3>Factory (object creation)</h3>
+        <pre><code>public class ConnectionFactory {
+    public static Connection create(String type) {
+        if (type.equals("mysql")) return new MySqlConnection();
+        return new H2Connection();
+    }
+}</code></pre>
+
+        <h3>Strategy (behavioral)</h3>
+        <pre><code>public interface SortStrategy {
+    void sort(List&lt;Integer&gt; list);
+}
+
+public class QuickSortStrategy implements SortStrategy { /*...*/ }</code></pre>
+
+        <h3>Decorator (extend behavior)</h3>
+        <pre><code>public interface Renderer { String render(); }
+
+public class BasicRenderer implements Renderer { ... }
+
+public class HtmlWrapper implements Renderer {
+    private final Renderer inner;
+    public HtmlWrapper(Renderer inner) { this.inner = inner; }
+    public String render() { return "&lt;div&gt;" + inner.render() + "&lt;/div&gt;"; }
+}</code></pre>
+
+        <p>Learn patterns for the reasoning they capture, not to force-fit code into them. Overusing patterns leads to needless complexity.</p>
+      </section>
+
+      <section id="practical-examples">
+        <h2>Practical examples — from concept to code</h2>
+
+        <h3>Example 1: Logging abstraction</h3>
+        <p>Abstracting logging behind an interface lets you change logger implementations and simplifies testing.</p>
+        <pre><code>public interface Logger {
+    void info(String msg);
+    void error(String msg, Throwable t);
+}
+
+public class ConsoleLogger implements Logger {
+    public void info(String msg){ System.out.println(msg); }
+    public void error(String msg, Throwable t){ t.printStackTrace(); }
+}</code></pre>
+
+        <h3>Example 2: Using composition over inheritance</h3>
+        <p>Instead of inheriting many behaviors, compose objects:</p>
+        <pre><code>public class TextEditor {
+    private final SpellChecker spellChecker;
+    public TextEditor(SpellChecker checker) { this.spellChecker = checker; }
+    public void check() { spellChecker.check(this); }
+}</code></pre>
+
+        <p>Composition yields more flexible designs and avoids fragile superclass changes.</p>
+      </section>
+
+      <section id="testing-design">
+        <h2>Testing & refactoring OOP code</h2>
+        <p>OOP and testing go hand-in-hand. Use dependency injection (constructor injection) to pass mocks in unit tests. Keep classes small and focused so tests are straightforward.</p>
+
+        <h3>Example: constructor injection for testability</h3>
+        <pre><code>public class OrderService {
+    private final PaymentProcessor processor;
+    public OrderService(PaymentProcessor processor){ this.processor = processor; }
+    public boolean place(Order o){ return processor.process(o.getPayment()); }
+}</code></pre>
+
+        <p>In tests, inject a fake <code>PaymentProcessor</code> to simulate success/failure scenarios.</p>
+
+        <h3>Refactoring tips</h3>
+        <ul>
+          <li>When a class grows past a few hundred lines, split it.</li>
+          <li>Extract methods for complex logic; extract classes for cohesive responsibilities.</li>
+          <li>Apply tests before heavy refactors (write characterization tests).</li>
+        </ul>
+      </section>
+
+      <section id="faq">
+        <h2>FAQ</h2>
+
+        <h3>Q: When should I use abstract classes vs interfaces?</h3>
+        <p>A: Use interfaces to define behavior contracts. Use abstract classes when you want to provide partial implementation that shares state across subclasses.</p>
+
+        <h3>Q: Is inheritance dead in modern Java?</h3>
+        <p>A: Not dead — but apply it judiciously. Favor composition and interfaces; reserve inheritance for clear <em>is-a</em> taxonomies.</p>
+
+        <h3>Q: How do I avoid over-engineering?</h3>
+        <p>A: Start simple. Implement the minimal design that works, then refactor as requirements evolve. Use YAGNI (You Aren't Gonna Need It) as a guiding principle.</p>
+      </section>
+
+      <section id="takeaways">
+        <h2>Key takeaways</h2>
+        <ul>
+          <li>Master the four pillars: encapsulation, inheritance, polymorphism, abstraction — and know when to apply or avoid each.</li>
+          <li>Prefer composition and interfaces for flexible, testable designs.</li>
+          <li>Apply SOLID principles incrementally: they’re guidelines, not dogma.</li>
+          <li>Use design patterns as communication tools — understand the problem they solve before applying them.</li>
+          <li>Write small classes, inject dependencies for testability, and keep code easy to read.</li>
+        </ul>
+
+        <p>Practice: implement a small project (e.g., a bookstore API) focusing on SRP and DIP. Add tests and refactor until classes are cohesive and responsibilities are clear.</p>
+      </section>
+
+    </main>
+
+    <aside class="sidebar">
+      <div class="related">
+        <h3>Related articles</h3>
+        <a class="related-link" href="{{ url_for('blog_post', post_slug='mastering-algorithms-data-structures') }}">
+          <strong>Mastering Data Structures & Algorithms</strong>
+          <p class="excerpt">Understand algorithmic patterns and the data structures they require.</p>
+        </a>
+        <a class="related-link" href="{{ url_for('blog_post', post_slug='version-control-git-github') }}">
+          <strong>Version Control with Git & GitHub</strong>
+          <p class="excerpt">Workflows that help you manage OOP codebases professionally.</p>
+        </a>
+      </div>
+
+      <div class="cta-card">
+        <h4>Practice challenge</h4>
+        <p>Design a small library for modeling a bookstore: books, customers, orders. Apply SRP and DIP, add interfaces for persistence, and write unit tests for the service layer.</p>
+      </div>
+    </aside>
+  </div>
+</article>
+{% endblock %}
