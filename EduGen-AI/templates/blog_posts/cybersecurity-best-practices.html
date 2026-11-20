@@ -1,0 +1,278 @@
+{% extends "base.html" %}
+{% block title %}Cybersecurity Best Practices: Protecting Your Code & Data | EduGen AI{% endblock %}
+
+{% block favicon %}
+<link rel="icon" type="image/png" href="{{ url_for('static', filename='icons/home.png') }}">
+{% endblock %}
+
+{% block head_extra %}
+<meta name="description" content="Developer-focused cybersecurity guide: secure coding, authentication, encryption, OWASP Top 10, threat modeling, CI/CD security, and practical defenses to protect applications and user data.">
+<meta name="keywords" content="cybersecurity, secure coding, OWASP Top 10, encryption, authentication, web security, application security">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/blog.css') }}">
+{% endblock %}
+
+{% block content %}
+<article class="blog-article">
+  <div class="article-hero">
+    <div class="container article-hero-inner">
+      <div class="hero-left">
+        <nav class="breadcrumb">
+          <a href="{{ url_for('home') }}">Home</a>
+          <i class="fas fa-chevron-right"></i>
+          <a href="{{ url_for('blog') }}">Blog</a>
+          <i class="fas fa-chevron-right"></i>
+          <span>Cybersecurity Best Practices</span>
+        </nav>
+
+        <h1 class="article-title">Cybersecurity Best Practices: Protecting Your Code & Data</h1>
+
+        <div class="post-meta">
+          <span><i class="far fa-calendar"></i> December 22, 2024</span>
+          <span><i class="far fa-clock"></i> ~24 min read</span>
+          <span class="tags">
+            <span class="tag">Security</span>
+            <span class="tag">Secure Coding</span>
+            <span class="tag">OWASP</span>
+          </span>
+        </div>
+
+        <p class="lead">Security is a fundamental responsibility for every developer. This guide covers practical defenses—from secure coding patterns and authentication to deployments, CI/CD, threat modeling, and secure-by-default tooling—so your apps are resilient against common attacks.</p>
+      </div>
+
+      <div class="hero-right">
+        <div class="toc-card">
+          <div class="toc-title">Table of Contents</div>
+          <ol class="toc-list">
+            <li><a href="#security-mindset">Security mindset & threat modeling</a></li>
+            <li><a href="#secure-coding">Secure coding fundamentals</a></li>
+            <li><a href="#input-validation">Input validation & output encoding</a></li>
+            <li><a href="#auth">Authentication & session management</a></li>
+            <li><a href="#crypto">Encryption & key management</a></li>
+            <li><a href="#owasp">OWASP Top 10: quick defenses</a></li>
+            <li><a href="#deployment">Secure deployment & CI/CD</a></li>
+            <li><a href="#monitoring">Logging, monitoring & incident response</a></li>
+            <li><a href="#privacy">Data privacy & compliance</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#takeaways">Key takeaways & practice</a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container article-body">
+    <main class="content">
+
+      <section id="security-mindset">
+        <h2>Security mindset & threat modeling</h2>
+        <p>Security begins with mindset: assume attackers will probe your system for weaknesses. Threat modeling is the process of identifying assets, entry points, threats, and mitigations before writing code.</p>
+
+        <p>Simple threat modeling steps:</p>
+        <ol>
+          <li>Identify assets (user data, credentials, servers).</li>
+          <li>Map attack surface (APIs, auth endpoints, file uploads).</li>
+          <li>Enumerate threats (injection, broken auth, data exfiltration).</li>
+          <li>Prioritize risks by impact and likelihood, then mitigate with design and controls.</li>
+        </ol>
+
+        <figure>
+          <img src="{{ url_for('static', filename='images/threat-modeling-placeholder.png') }}" alt="Threat modeling diagram" style="width:100%;border-radius:8px;">
+          <figcaption>Figure: Example threat model with assets, entry points, and mitigations.</figcaption>
+        </figure>
+      </section>
+
+      <section id="secure-coding">
+        <h2>Secure coding fundamentals</h2>
+        <p>Follow these baseline practices in every project:</p>
+        <ul>
+          <li>Validate inputs and encode outputs.</li>
+          <li>Use least privilege (for services, users, databases).</li>
+          <li>Fail securely—deny access by default and give minimal error information to users.</li>
+          <li>Avoid rolling your own crypto or auth—use vetted libraries.</li>
+          <li>Keep dependencies up-to-date and track vulnerabilities (dependabot, Snyk).</li>
+        </ul>
+
+        <p>Example: prefer high-level APIs that prevent common mistakes (parameterized queries instead of string concatenation for SQL).</p>
+        <pre><code># Bad: vulnerable to SQL injection (do NOT do this)
+query = "SELECT * FROM users WHERE email = '" + email + "'"
+
+# Good: parameterized query (example in Python + psycopg2)
+cursor.execute("SELECT * FROM users WHERE email = %s", (email,))</code></pre>
+      </section>
+
+      <section id="input-validation">
+        <h2>Input validation & output encoding</h2>
+        <p>Treat all inputs as untrusted. Validate type, length, format, and range. Use a whitelist approach (allow only what’s expected) rather than blacklists.</p>
+
+        <h3>Output encoding</h3>
+        <p>Encode output for the intended context (HTML, JavaScript, URL, SQL) to prevent injection attacks (XSS, SQLi). For web templates, use frameworks with built-in escaping or template engines that auto-escape by default.</p>
+
+        <pre><code>&lt;!-- In templating frameworks like Jinja2, prefer autoescaping and avoid inserting raw HTML --&gt;
+&lt;div&gt;{{ user_input }}&lt;/div&gt;</code></pre>
+
+        <p>If you must render HTML from user content, sanitize it with a strict allowlist (e.g., Bleach for Python).</p>
+      </section>
+
+      <section id="auth">
+        <h2>Authentication & session management</h2>
+        <p>Authentication failures lead to account takeover and data leaks. Implement robust authentication and session controls:</p>
+
+        <ul>
+          <li>Use proven frameworks/services (OAuth providers, Auth0, Firebase Auth) when possible.</li>
+          <li>Store password hashes using a slow, adaptive algorithm (bcrypt, Argon2) with per-user salts.</li>
+          <li>Protect session cookies: use <code>Secure</code>, <code>HttpOnly</code>, and <code>SameSite</code> attributes.</li>
+          <li>Implement multi-factor authentication (MFA) for critical actions.</li>
+        </ul>
+
+        <pre><code># Example cookie flags (Express.js)
+res.cookie('sid', sessionId, { httpOnly: true, secure: true, sameSite: 'Strict' });</code></pre>
+
+        <p>Rotate credentials and session tokens on sensitive events (password change, suspicious activity). Limit session lifetime and implement logout/invalidation.</p>
+      </section>
+
+      <section id="crypto">
+        <h2>Encryption & key management</h2>
+        <p>Encryption protects data at rest and in transit. Use TLS (HTTPS) with modern ciphers and HSTS for transport security. For data at rest, use vetted encryption libraries and manage keys securely.</p>
+
+        <h3>Key management</h3>
+        <ul>
+          <li>Do not hardcode secrets in source code or config files.</li>
+          <li>Use secret managers (Vault, AWS Secrets Manager, GCP Secret Manager).</li>
+          <li>Rotate keys and limit access with IAM policies.</li>
+        </ul>
+
+        <pre><code># Example: do not store credentials in repo
+# BAD: in source
+DATABASE_PASSWORD = "supersecret"
+
+# GOOD: read from environment or secret manager
+DATABASE_PASSWORD = os.environ.get("DATABASE_PASSWORD")</code></pre>
+      </section>
+
+      <section id="owasp">
+        <h2>OWASP Top 10 — quick defenses</h2>
+        <p>The OWASP Top 10 highlights the most critical web application security risks. Brief defenses for common items:</p>
+
+        <h3>1. Injection (SQL, NoSQL, OS, LDAP)</h3>
+        <p>Use parameterized queries, ORM APIs, and avoid constructing queries from user input.</p>
+
+        <h3>2. Broken Authentication</h3>
+        <p>Use strong password policies, MFA, and secure session management.</p>
+
+        <h3>3. Sensitive Data Exposure</h3>
+        <p>Encrypt data in transit & at rest, minimize data collection, and mask logs.</p>
+
+        <h3>4. XML External Entities (XXE)</h3>
+        <p>Disable external entity processing in XML parsers.</p>
+
+        <h3>5. Broken Access Control</h3>
+        <p>Enforce authorization checks server-side; never rely on client checks.</p>
+
+        <h3>6. Security Misconfiguration</h3>
+        <p>Harden servers, remove default creds, and automate configuration via IaC with secure defaults.</p>
+
+        <h3>7. Cross-Site Scripting (XSS)</h3>
+        <p>Escape output, use CSP, and sanitize user HTML inputs.</p>
+
+        <h3>8. Insecure Deserialization</h3>
+        <p>Avoid accepting serialized objects from untrusted sources; validate or use safe formats like JSON.</p>
+
+        <h3>9. Using Components with Known Vulnerabilities</h3>
+        <p>Scan dependencies, apply patches, and use tools like dependabot or Snyk.</p>
+
+        <h3>10. Insufficient Logging & Monitoring</h3>
+        <p>Log security events and monitor for anomalies with alerting and retention policies.</p>
+      </section>
+
+      <section id="deployment">
+        <h2>Secure deployment & CI/CD</h2>
+        <p>Security must extend to build and deployment pipelines:</p>
+        <ul>
+          <li>Run builds in ephemeral, minimal privilege environments.</li>
+          <li>Scan artifacts and images for vulnerabilities before deployment.</li>
+          <li>Sign release artifacts and use provenance tracking.</li>
+          <li>Limit who can merge to main and require passing security checks (SAST, dependency scanning).</li>
+        </ul>
+
+        <pre><code># Example: GitHub Actions job snippet that scans dependencies (pseudo)
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run dependency scan
+        run: snyk test || true</code></pre>
+
+        <p>Use network segmentation and firewalls for production infrastructure. Ensure secrets used by CI are stored in secret stores and not printed in logs.</p>
+      </section>
+
+      <section id="monitoring">
+        <h2>Logging, monitoring & incident response</h2>
+        <p>Good logging and monitoring detect issues early. Protect logs from tampering and avoid storing sensitive data in logs.</p>
+
+        <h3>Monitoring & alerting</h3>
+        <ul>
+          <li>Collect metrics (auth failures, spike in 500s) and set meaningful alerts.</li>
+          <li>Use centralized logging (ELK, Splunk, Datadog) with retention and role-based access.</li>
+        </ul>
+
+        <h3>Incident response</h3>
+        <p>Have an incident playbook: identification, containment, eradication, recovery, and post-mortem. Practice tabletop exercises to improve response times.</p>
+      </section>
+
+      <section id="privacy">
+        <h2>Data privacy & compliance</h2>
+        <p>Understand legal obligations (GDPR, CCPA) if you process personal data. Minimize data collection, document processing, and provide mechanisms for data subject requests.</p>
+
+        <p>Pseudonymize or anonymize data where possible, and ensure data retention policies are enforced.</p>
+      </section>
+
+      <section id="faq">
+        <h2>FAQ</h2>
+
+        <h3>Q: Do I need to be a security expert to build secure apps?</h3>
+        <p>A: No — you need to follow secure defaults, use vetted libraries, and have basic hygiene (validation, encryption, patching). For critical systems consult security experts and perform formal reviews.</p>
+
+        <h3>Q: How do I handle a data breach?</h3>
+        <p>A: Follow your incident response plan, contain the breach, rotate secrets, notify affected users and authorities as required, and perform a post-mortem. Legal obligations depend on jurisdiction.</p>
+
+        <h3>Q: What simple steps reduce most risk?</h3>
+        <p>A: Enforce HTTPS, avoid storing plain-text secrets, require strong password hashing, validate inputs, keep dependencies patched, and monitor logs.</p>
+      </section>
+
+      <section id="takeaways">
+        <h2>Key takeaways & practice</h2>
+        <ul>
+          <li>Adopt secure defaults: least privilege, fail-safe defaults, and use vetted libraries.</li>
+          <li>Threat model early and iterate—security-by-design beats security-as-an-afterthought.</li>
+          <li>Automate security scans and patching in CI/CD, and protect secrets with proper key management.</li>
+          <li>Document incident plans and practice them periodically.</li>
+          <li>Keep logs, metrics, and alerting tuned to detect suspicious behavior quickly.</li>
+        </ul>
+
+        <p><strong>Practice challenge:</strong> Pick a small web app and perform a short security review: run dependency scans, test for XSS and SQLi with safe tools, ensure TLS is enforced, and add an automated security check to the CI pipeline.</p>
+      </section>
+
+    </main>
+
+    <aside class="sidebar">
+      <div class="related">
+        <h3>Related articles</h3>
+        <a class="related-link" href="{{ url_for('blog_post', post_slug='cybersecurity-best-practices') }}">
+          <strong>Security fundamentals deep dive</strong>
+          <p class="excerpt">Further reading on secure architectures and threat modeling.</p>
+        </a>
+        <a class="related-link" href="{{ url_for('blog_post', post_slug='debugging-techniques-students') }}">
+          <strong>Debugging Techniques</strong>
+          <p class="excerpt">Use sanitizers and runtime checks to find security-related bugs.</p>
+        </a>
+      </div>
+
+      <div class="cta-card">
+        <h4>Practice challenge</h4>
+        <p>Run an automated static analysis tool on a toy project, fix the top 3 issues, and add the scan to your CI so the issues are blocked in future PRs.</p>
+      </div>
+    </aside>
+  </div>
+</article>
+{% endblock %}

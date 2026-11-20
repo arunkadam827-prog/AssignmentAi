@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}EduGen AI — Your AI Study Workspace{% endblock %}
+{% block head_extra %}
+<meta name="description" content="Learn smarter with EduGen AI. Generate assignment explanations, coding solutions and discussion answers with AI-powered study tools.">
+<meta name="theme-color" content="#0b1020">
+{% endblock %}
+{% block content %}
+<div class="edugen-home">
+  <section class="ed-hero">
+    <div class="ed-hero-glow ed-glow-one"></div><div class="ed-hero-glow ed-glow-two"></div>
+    <div class="ed-container ed-hero-grid">
+      <div class="ed-hero-copy">
+        <div class="ed-eyebrow"><span class="ed-pulse"></span> YOUR AI-POWERED STUDY WORKSPACE</div>
+        <h1>Make learning<br><span>clearer. Faster. Smarter.</span></h1>
+        <p class="ed-lead">Turn difficult questions, coding tasks and course discussions into clear, structured explanations. Your study companion is ready when you are.</p>
+        <div class="ed-hero-actions">
+          <a class="ed-btn ed-btn-primary" href="{{ url_for('assignment_generator') }}">Create an assignment <i class="fas fa-arrow-right"></i></a>
+          <a class="ed-btn ed-btn-ghost" href="{{ url_for('gdb_generator') }}"><i class="fas fa-comments"></i> Ask a question</a>
+        </div>
+        <div class="ed-trust-line"><i class="fas fa-check-circle"></i> Built for focused study <span>·</span> <i class="fas fa-bolt"></i> AI-assisted answers <span>·</span> <i class="fas fa-book-open"></i> Learn as you go</div>
+      </div>
+      <div class="ed-hero-art" aria-label="Preview of the EduGen AI study workspace">
+        <div class="ed-window">
+          <div class="ed-window-top"><div class="ed-window-dots"><b></b><b></b><b></b></div><span>edugen_workspace.ai</span><i class="fas fa-ellipsis"></i></div>
+          <div class="ed-window-body">
+            <div class="ed-mini-label">YOUR STUDY SESSION <span>● ACTIVE</span></div>
+            <div class="ed-prompt-card"><div class="ed-prompt-icon"><i class="fas fa-brain"></i></div><div><small>YOUR QUESTION</small><strong>Explain object-oriented programming</strong></div></div>
+            <div class="ed-answer-head"><span class="ed-answer-mark"><i class="fas fa-sparkles"></i></span><div><strong>EduGen explanation</strong><small>Structured for easy understanding</small></div></div>
+            <div class="ed-answer-lines"><i></i><i></i><i></i><i></i></div>
+            <div class="ed-concept-row"><span>01&nbsp; Classes</span><span>02&nbsp; Objects</span><span>03&nbsp; Inheritance</span></div>
+            <div class="ed-code-card"><div><span></span><span></span><span></span></div><code><em>class</em> Student {<br>&nbsp;&nbsp;String name;<br>&nbsp;&nbsp;<b>void</b> learn() { ... }<br>}</code></div>
+          </div>
+        </div>
+        <div class="ed-float-chip ed-chip-top"><i class="fas fa-check"></i> Clear explanations</div>
+        <div class="ed-float-chip ed-chip-bottom"><i class="fas fa-code"></i> Code + concepts</div>
+      </div>
+    </div>
+    <div class="ed-hero-bottom"><span>STUDY WITH CLARITY</span><div></div><span>EDUGEN AI</span></div>
+  </section>
+
+  <section class="ed-tools-section" id="features">
+    <div class="ed-container">
+      <div class="ed-section-heading"><div><div class="ed-section-kicker">TOOLS THAT MOVE YOU FORWARD</div><h2>Everything you need to<br><span>work through the tough parts.</span></h2></div><p>Choose a tool, share what you are working on, and get a useful starting point for your learning.</p></div>
+      <div class="ed-tool-grid">
+        <a class="ed-tool-card ed-tool-featured" href="{{ url_for('assignment_generator') }}"><div class="ed-tool-top"><span class="ed-tool-icon"><i class="fas fa-file-code"></i></span><span class="ed-tool-arrow"><i class="fas fa-arrow-up-right-from-square"></i></span></div><div class="ed-card-tag">01 / ASSIGNMENTS</div><h3>Assignment Generator</h3><p>Upload your assignment document or source file and generate a structured explanation or solution to help you understand the task.</p><span class="ed-card-link">Open assignment tool <i class="fas fa-arrow-right"></i></span></a>
+        <a class="ed-tool-card" href="{{ url_for('gdb_generator') }}"><div class="ed-tool-top"><span class="ed-tool-icon ed-icon-violet"><i class="fas fa-comments"></i></span><span class="ed-tool-arrow"><i class="fas fa-arrow-up-right-from-square"></i></span></div><div class="ed-card-tag">02 / DISCUSSIONS</div><h3>GDB Generator</h3><p>Explore academic topics with organized answers, key points and explanations across different subjects.</p><span class="ed-card-link">Open GDB tool <i class="fas fa-arrow-right"></i></span></a>
+        <a class="ed-tool-card" href="{{ url_for('blog') }}"><div class="ed-tool-top"><span class="ed-tool-icon ed-icon-cyan"><i class="fas fa-book-open"></i></span><span class="ed-tool-arrow"><i class="fas fa-arrow-up-right-from-square"></i></span></div><div class="ed-card-tag">03 / KNOWLEDGE</div><h3>Learning Library</h3><p>Read practical guides on programming, databases, algorithms, web development and computer science fundamentals.</p><span class="ed-card-link">Explore articles <i class="fas fa-arrow-right"></i></span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ed-process-section" id="how-it-works"><div class="ed-container ed-process-grid"><div><div class="ed-section-kicker">A SIMPLE WORKFLOW</div><h2>From question<br>to <span>understanding.</span></h2><p class="ed-process-intro">Stay in control of your learning. Use AI to get unstuck, then review the reasoning and make the knowledge your own.</p><a class="ed-text-link" href="{{ url_for('assignment_generator') }}">Start your first session <i class="fas fa-arrow-right"></i></a></div><div class="ed-steps"><div class="ed-step"><div class="ed-step-num">01</div><div><h3>Share your task</h3><p>Enter a question or upload a supported document or code file.</p></div></div><div class="ed-step"><div class="ed-step-num">02</div><div><h3>Generate guidance</h3><p>Let EduGen AI prepare a structured response for your topic.</p></div></div><div class="ed-step"><div class="ed-step-num">03</div><div><h3>Review and learn</h3><p>Check the explanation, test the ideas and build your understanding.</p></div></div></div></div></section>
+
+  <section class="ed-cta-section"><div class="ed-container"><div class="ed-cta-card"><div><div class="ed-section-kicker">YOUR NEXT STUDY SESSION STARTS HERE</div><h2>Ready to make progress?</h2><p>Bring your question. Leave with a clearer path forward.</p></div><a class="ed-btn ed-btn-light" href="{{ url_for('assignment_generator') }}">Get started <i class="fas fa-arrow-right"></i></a></div></div></section>
+</div>
+{% endblock %}
